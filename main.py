@@ -48,11 +48,15 @@ exit_img = pygame.image.load(images["exit_btn"])
 coin_fx = pygame.mixer.Sound(sounds["coin"])
 coin_fx.set_volume(1)
 jump_fx = pygame.mixer.Sound(sounds["jump"])
-jump_fx.set_volume(.5)
+jump_fx.set_volume(.4)
 game_over_fx = pygame.mixer.Sound(sounds["game_over"])
 game_over_fx.set_volume(1)
 level_complete_fx = pygame.mixer.Sound(sounds["level_complete"])
 level_complete_fx.set_volume(1)
+door_fx = pygame.mixer.Sound(sounds["door"])
+door_fx.set_volume(2.5)
+
+exit_door = None
 
 
 def draw_text(text, font, text_col, x, y):
@@ -219,7 +223,7 @@ class Player:
                 game_over_fx.play()
 
             # check for collision with exit
-            if pygame.sprite.spritecollide(self, exit_group, False):
+            if pygame.sprite.spritecollide(self, exit_group, False) and len(coin_group) == 1:
                 game_over = 1
                 level_complete_fx.play()
 
@@ -352,11 +356,12 @@ class World:
                     )
                     coin_group.add(coin)
                 if tile == 8:
-                    exit = Exit(
+                    global exit_door
+                    exit_door = Exit(
                         col_count * tile_size, row_count *
-                        tile_size - (tile_size // 2)
+                        tile_size - (tile_size // 3)
                     )
-                    exit_group.add(exit)
+                    exit_group.add(exit_door)
                 col_count += 1
             row_count += 1
 
@@ -429,9 +434,12 @@ class Coin(pygame.sprite.Sprite):
 class Exit(pygame.sprite.Sprite):
     def __init__(self, x, y):
         pygame.sprite.Sprite.__init__(self)
-        img = pygame.image.load(images["exit"])
+        if len(coin_group) == 1:
+            img = pygame.image.load(images["opened_exit"])
+        else:
+            img = pygame.image.load(images["exit"])
         self.image = pygame.transform.scale(
-            img, (tile_size, int(tile_size * 1.5)))
+            img, (tile_size, int(tile_size * 1.3)))
         self.rect = self.image.get_rect()
         self.rect.x = x
         self.rect.y = y
@@ -487,6 +495,11 @@ while run:
             if pygame.sprite.spritecollide(player, coin_group, True) or pygame.sprite.spritecollide(player2, coin_group, True):
                 score += 1
                 coin_fx.play()
+                if len(coin_group) == 1:
+                    img = pygame.image.load(images["opened_exit"])
+                    exit_door.image = pygame.transform.scale(
+                        img, (tile_size, int(tile_size * 1.3)))
+                    door_fx.play()
             draw_text("X " + str(score), font_score, white, tile_size - 10, 10)
 
         blob_group.draw(screen)

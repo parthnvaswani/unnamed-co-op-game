@@ -3,6 +3,7 @@ sounds = {
     "jump": "./sound/jump.mp3",
     "game_over": "./sound/game_over.mp3",
     "level_complete": "./sound/level_complete.mp3",
+    "door": "./sound/door.wav",
 }
 
 images = {
@@ -24,6 +25,7 @@ images = {
     "lava": "./img/lava.png",
     "coin": "./img/coin.png",
     "exit": "./img/exit.png",
+    "opened_exit": "./img/opened_exit.png",
     "platform_x": "./img/platform_x.png",
     "platform_y": "./img/platform_y.png",
     "load_btn": "./img/load_btn.png",
