@@ -125,7 +125,7 @@ class Player:
         walk_cooldown = 5
         col_thresh = 20
 
-        if game_over == 0:
+        if game_over == 0 and self.alive:
             # get keypresses
             key = pygame.key.get_pressed()
             if self.num == 1:
@@ -214,12 +214,18 @@ class Player:
 
             # check for collision with enemies
             if pygame.sprite.spritecollide(self, blob_group, False):
-                game_over = -1
+                if not(player.alive and player2.alive):
+                    game_over = -1
+                self.alive = False
+                self.image = self.dead_image
                 game_over_fx.play()
 
             # check for collision with lava
             if pygame.sprite.spritecollide(self, lava_group, False):
-                game_over = -1
+                if not(player.alive and player2.alive):
+                    game_over = -1
+                self.alive = False
+                self.image = self.dead_image
                 game_over_fx.play()
 
             # check for collision with exit
@@ -255,15 +261,12 @@ class Player:
                     # move sideways with the platform
                     if hasattr(platform, "move_x") and platform.move_x != 0:
                         self.rect.x += platform.move_direction
-                    elif hasattr(platform, "num"):
-                        self.rect.x += platform.dx
 
             # update player coordinates
             self.rect.x += self.dx
             self.rect.y += self.dy
 
         elif game_over == -1:
-            self.image = self.dead_image
             draw_text(
                 "GAME OVER!", font, blue, (screen_width // 2) -
                 150, screen_height // 2
@@ -277,6 +280,7 @@ class Player:
         return game_over
 
     def reset(self, x, y):
+        self.alive = True
         self.images_right = []
         self.images_left = []
         self.index = 0
