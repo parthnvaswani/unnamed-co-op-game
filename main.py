@@ -434,7 +434,7 @@ class Coin(pygame.sprite.Sprite):
 class Exit(pygame.sprite.Sprite):
     def __init__(self, x, y):
         pygame.sprite.Sprite.__init__(self)
-        if len(coin_group) == 1:
+        if len(coin_group) <= 1:
             img = pygame.image.load(images["opened_exit"])
         else:
             img = pygame.image.load(images["exit"])
