@@ -1,6 +1,5 @@
 import pygame
 import pickle
-from os import path
 from levels import max_level
 from config import images
 
@@ -28,7 +27,7 @@ grass_img = pygame.image.load(images["grass"])
 blob_img = pygame.image.load(images["blob"])
 platform_x_img = pygame.image.load(images["platform_x"])
 platform_y_img = pygame.image.load(images["platform_y"])
-lava_img = pygame.image.load(images["lava"])
+spike_img = pygame.image.load(images["spike"])
 coin_img = pygame.image.load(images["coin"])
 exit_img = pygame.image.load(images["exit"])
 save_img = pygame.image.load(images["save_btn"])
@@ -39,7 +38,7 @@ load_img = pygame.image.load(images["load_btn"])
 clicked = False
 level = max_level() + 1
 
-# define colours
+# define colors
 white = (255, 255, 255)
 green = (144, 201, 120)
 
@@ -123,9 +122,9 @@ def draw_world():
                     )
                     screen.blit(img, (col * tile_size, row * tile_size))
                 if world_data[row][col] == 6:
-                    # lava
+                    # spike
                     img = pygame.transform.scale(
-                        lava_img, (tile_size, tile_size // 2))
+                        spike_img, (tile_size, tile_size // 2))
                     screen.blit(
                         img, (col * tile_size, row *
                               tile_size + (tile_size // 2))
@@ -224,7 +223,7 @@ while run:
         # quit game
         if event.type == pygame.QUIT:
             run = False
-        # mouseclicks to change tiles
+        # mouse clicks to change tiles
         if event.type == pygame.MOUSEBUTTONDOWN and clicked == False:
             clicked = True
             pos = pygame.mouse.get_pos()

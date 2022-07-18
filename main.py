@@ -2,11 +2,10 @@ import pygame
 from pygame.locals import *
 from pygame import mixer
 import pickle
-from os import path
 from config import *
 from levels import max_level
 
-pygame.mixer.pre_init(44100, -16, 2, 512)
+mixer.pre_init(44100, -16, 2, 512)
 mixer.init()
 pygame.init()
 
@@ -17,7 +16,7 @@ screen_width = 1000
 screen_height = 1000
 
 screen = pygame.display.set_mode((screen_width, screen_height))
-pygame.display.set_caption("Unnamed Co Op Platformer")
+pygame.display.set_caption("Unnamed Co-Op Platformer")
 
 
 # define font
@@ -33,7 +32,7 @@ level = 0
 score = 0
 
 
-# define colours
+# define colors
 white = (255, 255, 255)
 blue = (0, 0, 255)
 
@@ -71,7 +70,7 @@ def reset_level(level):
     blob_group.empty()
     platform_group.empty()
     coin_group.empty()
-    lava_group.empty()
+    spike_group.empty()
     exit_group.empty()
 
     # load in level data and create world
@@ -126,7 +125,7 @@ class Player:
         col_thresh = 20
 
         if game_over == 0 and self.alive:
-            # get keypresses
+            # get key presses
             key = pygame.key.get_pressed()
             if self.num == 1:
                 if key[pygame.K_UP] and self.jumped == False and self.in_air == False:
@@ -220,8 +219,8 @@ class Player:
                 self.image = self.dead_image
                 game_over_fx.play()
 
-            # check for collision with lava
-            if pygame.sprite.spritecollide(self, lava_group, False):
+            # check for collision with spike
+            if pygame.sprite.spritecollide(self, spike_group, False):
                 if not(player.alive and player2.alive):
                     game_over = -1
                 self.alive = False
@@ -348,11 +347,11 @@ class World:
                     )
                     platform_group.add(platform)
                 if tile == 6:
-                    lava = Lava(
+                    spike = Spike(
                         col_count * tile_size, row_count *
                         tile_size + (tile_size // 2)
                     )
-                    lava_group.add(lava)
+                    spike_group.add(spike)
                 if tile == 7:
                     coin = Coin(
                         col_count * tile_size + (tile_size // 2),
@@ -415,10 +414,10 @@ class Platform(pygame.sprite.Sprite):
             self.move_counter *= -1
 
 
-class Lava(pygame.sprite.Sprite):
+class Spike(pygame.sprite.Sprite):
     def __init__(self, x, y):
         pygame.sprite.Sprite.__init__(self)
-        img = pygame.image.load(images["lava"])
+        img = pygame.image.load(images["spike"])
         self.image = pygame.transform.scale(img, (tile_size, tile_size // 2))
         self.rect = self.image.get_rect()
         self.rect.x = x
@@ -454,7 +453,7 @@ player2 = Player(100, screen_height - 130, 2)
 
 blob_group = pygame.sprite.Group()
 platform_group = pygame.sprite.Group()
-lava_group = pygame.sprite.Group()
+spike_group = pygame.sprite.Group()
 coin_group = pygame.sprite.Group()
 exit_group = pygame.sprite.Group()
 
@@ -508,7 +507,7 @@ while run:
 
         blob_group.draw(screen)
         platform_group.draw(screen)
-        lava_group.draw(screen)
+        spike_group.draw(screen)
         coin_group.draw(screen)
         exit_group.draw(screen)
 

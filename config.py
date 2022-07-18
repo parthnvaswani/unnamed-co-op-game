@@ -22,7 +22,7 @@ images = {
     "grass": "./img/grass.png",
     "blob": "./img/blob.png",
     "platform": "./img/platform.png",
-    "lava": "./img/lava.png",
+    "spike": "./img/spike.png",
     "coin": "./img/coin.png",
     "exit": "./img/exit.png",
     "opened_exit": "./img/opened_exit.png",
